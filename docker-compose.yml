@@ -1,0 +1,25 @@
+version: "3.3"
+services:
+  application:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '7000:7000'
+    image: scanner_application
+    container_name: scanner_application
+    networks:
+      - net
+  mlflow:                                             # create a MLFlow container
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: mlflow_container
+    ports:
+        - "5000:5000"                               # expose port
+    command: 'mlflow server --backend-store-uri ./mlflow --host 0.0.0.0 --port 5000'
+    networks:
+      - net
+networks:
+  net:
+    driver: bridge  #external: true
